@@ -1,0 +1,2183 @@
+<!DOCTYPE html>
+
+<!--------------------------------------------------------------------------------------------------->
+
+
+<!-- first words the editor is in development -->
+
+<!-- The user testing is pending -->
+
+<!-- socket.io integretion is pending -->
+
+<!-- only front end is completed the backend is also pending -->
+
+<!-- supports only >900px screen and the ui is pending -->
+
+
+<!--------------------------------------------------------------------------------------------------->
+
+<!-- the main aim is the output of question in image format that are saved in a javascript object -->
+
+<!-- all output is from the main canvas element  with the help of svg rectangle -->
+
+<!-- `write question` feature needed to be more focused -->
+
+<!-- the question number and subjects are stored in a single object which can be changed middleway , if the user wants to -->
+
+<!-- the `write question` feature can write more than one question at a time  then send all to the main canvas and store store acc to question -->
+
+<!-- For  pdf drawing on canvas the external library pdf.js is used -->
+
+<!-- Bootstrap is also used -->
+
+<!-- If the ocr feature is to be added then tesseract`s js library can be used -->
+
+<!-- No library is used for svg so this require better focus although it is tested -->
+
+<!-- You can create as many resizeable and draggable rect you want but in a sequence with predefined id`s -->
+
+<!-- The main focus of this editor must be that any one can make a question paper easily and in very short period of time  -->
+
+<!-- the capture image will not work without ssl certificate if it is on server -->
+
+<!-- the main aim to integrate socket.io is to connect peoples acc to their subjets to reduce the time in paper formation -->
+
+<!-- the questions are stored immediatley as the user click the go button in the toolbar and ````` it is not any facility yet to store them on cloud or to the web ````` -->
+
+<!-- socket.js is the file for socket io backending -->
+
+
+<!--------------------------------------------------------------------------------------------------->
+
+
+<!-- THANKS -->
+
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="icon" href="file:///C:/Users/Dell/Desktop/ext/pho/1.png">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous">
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"
+        integrity="sha512-Z8CqofpIcnJN80feS2uccz+pXWgZzeKxDsDNMD/dJ6997/LSRY+W4NmEt9acwR+Gt9OHN0kkI1CTianCwoqcjQ=="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.entry.min.js"
+        integrity="sha512-NJEHr6hlBM4MkVxJu+7FBk+pn7r+KD8rh+50DPglV/8T8I9ETqHJH0bO7NRPHaPszzYTxBWQztDfL6iJV6CQTw=="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js"
+        integrity="sha512-lHibs5XrZL9hXP3Dhr/d2xJgPy91f2mhVAasrSbMkbmoTSm2Kz8DuSWszBLUg31v+BM6tSiHSqT72xwjaNvl0g=="
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf_viewer.min.css"
+        integrity="sha512-5cOE2Zw/F4SlIUHR/xLTyFLSAR0ezXsra+8azx47gJyQCilATjazEE2hLQmMY7xeAv/RxxZhs8w8zEL7dTsvnA=="
+        crossorigin="anonymous" />
+</head>
+
+
+<body class="m-0 p-0">
+    <div class="container-fluid m-0 p-0">
+        <nav class="navbar navbar-expand-lg " id="navibar"
+            style="border: 5px solid #95a5a6;background-color:#2d89ef;border-bottom: 0px;">
+            <div class="container-fluid">
+                <div class=" btn "
+                    style="color:#2d89ef; box-shadow: inset 0px 0px 5px 0px #2d89ef; font-family:Trebuchet MS, Lucida Sans Unicode, Lucida Grande, Lucida Sans, Arial, sans-serif ; font-weight:bolder; font-size:3vh;float:right;background-color:#95a5a6;"
+                    href="#">Navbar</div>
+
+                <div style="float:right;">
+                    <div class="d-flex flex-row">
+                        <div class="mx-1 rounded btn"
+                            style="float:right; border:2px solid; box-shadow: inset 0px 0px 5px 0px #95a5a6; border-color:#95a5a6;">
+                            <div class="badge" style="text-decoration: none; font-size:2vh; color: #b7c4c5;" href="#">
+                                Home</div>
+                        </div>
+                        <div class="mx-1 rounded btn"
+                            style="float:right; border:2px solid; box-shadow: inset 0px 0px 5px 0px #95a5a6; border-color:#95a5a6;">
+                            <div class="badge" style="text-decoration: none; font-size:2vh; color: #b7c4c5;" href="#">
+                                Features</div>
+                        </div>
+                        <div class="mx-1 rounded btn"
+                            style="float:right; border:2px solid; box-shadow: inset 0px 0px 5px 0px #95a5a6; border-color:#95a5a6;">
+                            <div class="badge" style="text-decoration: none; font-size:2vh; color: #b7c4c5;" href="#">
+                                Pricing</div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+    </div>
+    <style>
+        .sibarcon {
+            background-color: #2d89ef;
+        }
+
+        .rou {
+            border-radius: 1% !important;
+        }
+
+        #sidebar {
+            background-color: #95a5a6;
+        }
+
+        #mainpage {
+            box-shadow: inset 0 0 0px 2px #95a5a6;
+
+        }
+
+        .insetbut:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 0 20px 0 #95a5a6 !important;
+        }
+
+        .clicko:active {
+            transform: translateY(1px);
+        }
+
+        .upload-div {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+
+
+        .upload-div input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+
+        }
+
+
+        .loadtr:active {
+            transform: translateY(1px);
+        }
+
+        .loadtr:hover {
+            box-shadow: inset 0 0 10px 0 #ffffff !important;
+
+        }
+    </style>
+
+    <div class="d-flex" id="mainconmid" style="height: 564px;">
+        <div class="m-0 p-0" id="sidebar" style="width:20%;float:left;position: relative;">
+            <div class="sibar d-flex flex-column p-1" style="overflow-y:auto;" id="masidebar">
+                <div class="sibarcon rounded my-1 container-fluid ">
+                    <div class="m-0  d-flex" style="text-align:center;">
+                        <div href="#" class="container-fluid btn" style="text-align: center;">a</div>
+                    </div>
+                </div>
+                <div class="sibarcon rounded my-1 container-fluid ">
+                    <div class="m-0  d-flex" style="text-align:center;">
+                        <div href="#" class="container-fluid btn" style="text-align: center;">a</div>
+                    </div>
+                </div>
+                <div class="sibarcon rounded my-1 container-fluid ">
+                    <div class="m-0  d-flex" style="text-align:center;">
+                        <div href="#" class="container-fluid btn" style="text-align: center;">a</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="mainpage" class="m-0 p-0" style="display:table;float:left; width:100%; height: 100%;">
+            <div class="midcon m-auto container-fluid "
+                style="background-color: #ffffff;display:table-cell;vertical-align:middle;border: 5px solid #95a5a6;width:100%;height:100%;border-left: 0px;"
+                id="midpg">
+                <div class="middle  m-auto d-flex"
+                    style="background-color: #95a5a6 ; border-radius:5px;width:100%; height:85%; ">
+
+
+                    <div class="d-flex m-0 p-0" style="width:100%;">
+
+
+                        <div class="m-0 p-0"
+                            style="overflow:auto;float:left;height: 100%;width:7%;background-color: #b7c4c5;border: 2px solid #95a5a6;border-right-width: 0px;">
+
+                            <div class="m-0 p-0 container-fluid d-flex flex-column">
+
+                                <div class="m-1 btn insetbut" id="goto"
+                                    style="background-color:transparent; border:2px outset #95a5a6; box-shadow:inset 0 0 5px 0 #95a5a6;">
+                                    Go</div>
+
+                                <div class="m-1 btn insetbut" id="relocate"
+                                    style="background-color:transparent; border:2px outset #95a5a6; box-shadow:inset 0 0 5px 0 #95a5a6;">
+                                    Re</div>
+
+                                <div class="m-1 btn insetbut" id="he+"
+                                    style="background-color:transparent; border:2px outset #95a5a6; box-shadow:inset 0 0 5px 0 #95a5a6;">
+                                    +H</div>
+
+                                <div class="m-1 btn insetbut" id="wi+"
+                                    style="background-color:transparent; border:2px outset #95a5a6; box-shadow:inset 0 0 5px 0 #95a5a6;">
+                                    +W</div>
+
+                                <div class="m-1 btn insetbut" id="he-"
+                                    style="background-color:transparent; border:2px outset #95a5a6; box-shadow:inset 0 0 5px 0 #95a5a6;">
+                                    -H</div>
+
+                                <div class="m-1 btn insetbut" id="wi-"
+                                    style="background-color:transparent; border:2px outset #95a5a6; box-shadow:inset 0 0 5px 0 #95a5a6;">
+                                    -W</div>
+
+                                <div class="m-1 btn insetbut"
+                                    style="background-color:transparent; border:2px outset #95a5a6; box-shadow:inset 0 0 5px 0 #95a5a6;">
+                                    <input class="m-0 p-0 form-control" type="number" name="intext" id="intext"></div>
+
+                                <div class="m-1 btn insetbut" id="nextpdfp"
+                                    style="background-color:transparent; border:2px outset #95a5a6; box-shadow:inset 0 0 5px 0 #95a5a6;">
+                                    N</div>
+
+                                <div class="m-1 btn insetbut" id="previouspdfp"
+                                    style="background-color:transparent; border:2px outset #95a5a6; box-shadow:inset 0 0 5px 0 #95a5a6;">
+                                    P</div>
+
+                                <div class="m-1 btn insetbut" id="imgplus"
+                                    style="background-color:transparent; border:2px outset #95a5a6; box-shadow:inset 0 0 5px 0 #95a5a6;">
+                                    +</div>
+
+                                <div class="m-1 btn insetbut" id="imgminus"
+                                    style="background-color:transparent; border:2px outset #95a5a6; box-shadow:inset 0 0 5px 0 #95a5a6;">
+                                    -</div>
+
+                                <div class="m-1 btn insetbut" id="gocapt"
+                                    style="display:none; background-color:transparent; border:2px outset #95a5a6; box-shadow:inset 0 0 5px 0 #95a5a6;">
+                                    C</div>
+
+
+
+                            </div>
+
+                        </div>
+
+
+
+
+                        <div id="canvascont" class="m-0 p-0"
+                            style="position:relative;float:left;height: 100%;width:50%;border: 2px solid #95a5a6;background-color: #ffffff;border-right-width: 0px;">
+                            <div class="m-0 p-0"
+                                style="position:absolute;overflow:auto;float:left;height: 100%; width:100%;background-color: #dee3e3;">
+
+
+                                <svg xmlns="http://www.w3.org/2000/svg" id="svgview1" class="svgresize"
+                                    style="z-index:3; position: absolute;">
+
+
+
+
+                                    <rect id="svgrect1" class="draggable" x="0" y="0" width="50" height="50"
+                                        fill="transparent" style="stroke:#2d89ef;stroke-width:2;" />
+                                    <circle id="zzcirc1" class="resizez" cx="0" cy="0" r="5" stroke="black"
+                                        stroke-width="0.05" fill="red" />
+                                    <circle id="zxcirc1" class="resizex" cx="0" cy="0" r="5" stroke="black"
+                                        stroke-width="0.05" fill="red" />
+                                    <circle id="zycirc1" class="resizey" cx="0" cy="0" r="5" stroke="black"
+                                        stroke-width="0.05" fill="red" />
+                                    <circle id="zdcirc1" class="resizexy" cx="0" cy="0" r="5" stroke="black"
+                                        stroke-width="0.05" fill="red" />
+                                </svg>
+
+
+
+
+                                <video style="z-index:2; position: absolute; display:none;" id="canvasvideo"></video>
+
+                                <canvas id="canvasview" style="position: absolute;">
+
+                                </canvas>
+                                <div class="m-0 p-0 " id="fideallsvg" style="display:none;">
+                                    <div class="m-0  p-0 svgheader container-fluid " id="headsvg"
+                                        style=" background-color: #95a5a6; width:1000px;position:relative;z-index:3;">
+                                        <div class="btn btn-primary m-1 " id="setfilesto">Go</div>
+
+                                        <div class="btn btn-primary m-1 svgtext">Text</div>
+                                        <div class="btn btn-primary m-1 svgimg">Image</div>
+                                        <div class="btn btn-primary m-1 svgtab">Table</div>
+                                        <input type="number" class="btn btn-primary m-1  " id="tabroww"
+                                            placeholder="Tab-rows">
+                                        <input type="number" class="btn btn-primary m-1  " id="tabcoll"
+                                            placeholder="Tab-columns">
+                                        <select class="btn btn-primary m-1 " id="fontss">
+
+                                            <option value="medium">Font-medium</option>
+                                            <option value="small">Font-small</option>
+                                            <option value="large">Font-large</option>
+                                            <option value="larger">Font-larger</option>
+                                        </select>
+                                        <div class="btn btn-primary m-1 "><input type="color" id="coinput"></div>
+                                        <div class="btn btn-primary m-1 " id="crana">Analyze</div>
+                                        <div class="btn btn-primary m-1 svgclear">Clear</div>
+                                        <div class="btn btn-primary m-1 " id="closearea">Close</div>
+
+                                    </div>
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        class="svgresize" width="1000" height="1000" id="svgview2"
+                                        style="z-index:3;background-color:white; position: absolute;">
+                                        <foreignObject>
+                                            <style id="toemhide">
+                                                .refbod {
+                                                    border: 1px solid red;
+                                                }
+
+                                                .backof {
+                                                    background-color: silver;
+                                                    resize: both;
+                                                }
+                                            </style>
+                                            <style id="toemch">
+                                                .inmea {
+                                                    font-size: large;
+                                                }
+                                            </style>
+                                            <style>
+                                                table,
+                                                th,
+                                                td {
+                                                    border: 1px solid black;
+                                                    border-collapse: collapse;
+                                                }
+                                            </style>
+                                        </foreignObject>
+                                        <g id="editorsvg">
+
+                                        </g>
+                                        <g id="helpersvg">
+                                            <rect id="svgrect2" class="draggable" x="0" y="0" width="50" height="50"
+                                                fill="transparent" style="z-index:4;stroke:#2d89ef;stroke-width:2;" />
+                                            <circle id="zzcirc2" class="resizez" cx="0" cy="0" r="5" stroke="black"
+                                                stroke-width="0.05" fill="red" style="z-index:3" />
+                                            <circle id="zxcirc2" class="resizex" cx="0" cy="0" r="5" stroke="black"
+                                                stroke-width="0.05" fill="red" style="z-index:3" />
+                                            <circle id="zycirc2" class="resizey" cx="0" cy="0" r="5" stroke="black"
+                                                stroke-width="0.05" fill="red" style="z-index:3" />
+                                            <circle id="zdcirc2" class="resizexy" cx="0" cy="0" r="5" stroke="black"
+                                                stroke-width="0.05" fill="red" style="z-index:3" />
+                                        </g>
+
+                                    </svg>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                        <style>
+                            div.upperr>div:nth-of-type(odd) {
+                                background-color: #aaaaaa;
+                            }
+
+                            div.upperr>div:nth-of-type(even) {
+                                background-color: #cacaca;
+                            }
+                        </style>
+
+
+
+                        <div id="whpalate" class="m-0 p-0 "
+                            style="overflow:hidden;float:left;height: 100%; width:50%;border: 2px solid #95a5a6;background-color: #dee3e3;">
+                            <div class="m-0 p-2 container-fluid  d-flex flex-row"
+                                style="background-color:#95a5a6;position:relative;overflow:auto;" id="subnotation">
+
+
+
+                            </div>
+                            <div>
+                                <div id="socketview" class=" m-0 p-0  "
+                                    style="display: flex; flex-direction: row; background-color: aliceblue; position:absolute;  overflow:auto">
+
+
+                                    <div class="sidee m-0 p-0  "
+                                        style="width:20%; border: 2px solid #95a5a6; border-right: 0;  background-color: #dee3e3;">
+                                        <div class="d-flex flex-column p-1" style="overflow: auto; height:100%;">
+                                            <div class="btn  mx-auto my-1 col-11 text-truncate"
+                                                style="background-color: #95a5a6; height: fit-content;">1nnnnnjmuuk
+                                            </div>
+                                            <div class="btn  mx-auto my-1 col-11 text-truncate"
+                                                style="background-color: #95a5a6; height: fit-content;">1nnnnnjmuuk
+                                            </div>
+                                            <div class="btn  mx-auto my-1 col-11 text-truncate"
+                                                style="background-color: #95a5a6; height: fit-content;">1nnnnnjmuuk
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="maino m-0 p-0   d-flex flex-column" style="width:80%; ">
+
+                                        <div id="msgarea" class="upperr m-0 p-0  "
+                                            style="height:88%;border: 2px solid #95a5a6; background-color: #dee3e3;">
+
+
+
+
+                                        </div>
+                                        <div class="lowerr m-0 p-0  d-flex flex-row"
+                                            style="position:absolute; background-color: #dee3e3; bottom:0; width: 80%; border: 2px solid #95a5a6;">
+
+                                            <div class="col-auto mx-auto my-2">
+                                                <label for="chattext" class="visually-hidden">Password</label>
+                                                <input type="text" class="form-control" id="chattext"
+                                                    placeholder="Say something ">
+                                            </div>
+                                            <div class="col-auto mx-auto my-2">
+                                                <button class="btn btn-primary " id="sendthechat">Send</button>
+                                            </div>
+                                            <div class="col-auto mx-auto my-2">
+                                                <button class="btn btn-primary " id="connectthechat">Connect</button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div id="qpalate" class="row m-0 p-0" style="overflow:auto">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="m-auto d-flex" style="overflow: auto;width:100%;height:10%; background-color: #95a5a6; ">
+
+                    <div class="m-auto p-0 container-fluid d-flex " style=" width:100%; overflow: auto;">
+                        <div class="m-1 btn loadtr" id="loadpdfs"
+                            style="background-color:#2d89ef; border:2px solid #2d89ef; box-shadow:inset 0 0 5px 0 #95a5a6; width:20%; float:left;">
+                            load pdf<span class="spinner-border spinner-border-sm  mx-2" role="status"
+                                style="display: none; color: #d1d6d6;" aria-hidden="true"></span></div>
+
+                        <div class="m-1 btn loadtr"
+                            style="background-color:#2d89ef; border:2px solid #2d89ef; box-shadow:inset 0 0 5px 0 #95a5a6; width:20%; float:left;">
+                            <input class="m-0 p-0 form-control" placeholder="Scale" type="text" name="intext"
+                                id="scalepdf"></div>
+
+                        <div class="m-1 btn loadtr"
+                            style="background-color:#2d89ef; border:2px solid #2d89ef; box-shadow:inset 0 0 5px 0 #95a5a6; width:20%; float:left;">
+                            <input class="m-0 p-0 form-control" type="text" placeholder="Pdf Page" name="intext"
+                                id="inpdf"></div>
+
+                        <div class="m-1 btn upload-div loadtr"
+                            style=" cursor: pointer !important; background-color:#2d89ef; border:2px solid #2d89ef; box-shadow:inset 0 0 5px 0 #95a5a6; width:20%; float:left;">
+                            <button class="btn m-0 p-0 ">Load image</button>
+                            <input type="file" style=" cursor: pointer !important;" class="m-0 p-0" id="loadingimg">
+
+                        </div>
+
+                        <div class="m-1 btn  loadtr" id="capturingimg"
+                            style=" background-color:#2d89ef; border:2px solid #2d89ef; box-shadow:inset 0 0 5px 0 #95a5a6; width:30%; float:left;">
+                            Capture image</div>
+
+                        <div class="m-1 btn loadtr" id="formatque"
+                            style=" background-color:#2d89ef; border:2px solid #2d89ef; box-shadow:inset 0 0 5px 0 #95a5a6; width:30%; float:left;">
+                            Write Question
+                        </div>
+
+                        <div class="m-1 btn  loadtr" id="socketsectiono"
+                            style=" background-color:#2d89ef; border:2px solid #2d89ef; box-shadow:inset 0 0 5px 0 #95a5a6; width:30%; float:left;">
+                            Invite</div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const msga = document.getElementById('msgarea');
+        const connectto = document.getElementById('connectthechat');
+        const textfieldo = document.getElementById('chattext');
+        const sendbtn = document.getElementById('sendthechat');
+
+
+
+
+
+        const socket = io();
+
+
+        socket.on('connect', () => {
+            msga.innerHTML += `<div class="alert   m-2 p-2" role="alert">Your id = ` + socket.id + ` </div>`
+        });
+
+
+
+        let theroom = null;
+
+
+        socket.on('successmsg', (msg) => {
+
+            msga.innerHTML += `<div class="alert   m-2 p-2" role="alert"> ` + msg + ` </div>`;
+
+        });
+
+        socket.on('roomname', (msg) => {
+
+            theroom = msg;
+
+        });
+
+
+        connectto.onclick = function () {
+
+            let promp = window.prompt('Write the id you want to connect');
+
+            if (promp != null || promp.trim() != '') {
+                socket.emit('idofconnecter', socket.id);
+                socket.emit('idtoconnect', promp);
+
+
+
+            }
+
+        };
+
+        sendbtn.onclick = function () {
+
+            if (theroom != null) {
+
+                let text = textfieldo.value
+
+                if (text != null || text.trim() != "") {
+
+                    socket.emit("chattexto", text);
+
+                }
+            } else {
+                alert('connect first');
+            }
+        };
+
+
+
+        socket.on('chattexto', (msgo) => {
+
+
+
+            msga.innerHTML += `<div class="alert   m-2 p-2" role="alert"> ` + msgo + ` </div>`;
+
+        });
+    </script>
+
+
+
+
+    <script>
+        const sockview = document.getElementById('socketview');
+        const sockbuttono = document.getElementById('socketsectiono');
+
+
+
+
+        sockbuttono.onclick = function (ev) {
+
+
+
+            let compStyles = window.getComputedStyle(sockview);
+
+
+            if (compStyles.getPropertyValue('display') == 'none') {
+
+                sockview.style.display = "flex";
+
+            } else {
+                sockview.style.display = "none";
+            }
+
+
+        };
+    </script>
+
+
+
+    <script>
+        const processall = document.getElementById('setfilesto');
+        const written = document.getElementById('formatque');
+
+        const wrsvg = document.getElementById('svgview2');
+
+        const rect2 = document.getElementById('svgrect2');
+
+        const headtoadd = document.getElementById('headsvg');
+
+        const editorxy = document.getElementById('editorsvg');
+
+        const changestyle = document.getElementById('toemch');
+
+        const hstyle = document.getElementById('toemhide');
+
+        const analyzer = document.getElementById('crana');
+
+        const cleditor = document.getElementById('closearea');
+
+        const allsvgcl = document.getElementById('fideallsvg');
+
+
+        let rowso = 10;
+        let columnso = 5;
+
+
+        document.getElementById('tabroww').oninput = function () {
+            applyroww()
+        };
+        document.getElementById('tabroww').onchange = function () {
+            applyroww()
+        };
+
+        document.getElementById('tabcoll').oninput = function () {
+            applycoll()
+        };
+        document.getElementById('tabcoll').onchange = function () {
+            applycoll()
+        };
+
+
+
+        function applyroww() {
+
+            if (document.getElementById('tabroww').value > 0 && document.getElementById('tabroww').value <= 20) {
+                rowso = Number(document.getElementById('tabroww').value);
+            }
+
+        }
+
+
+        function applycoll() {
+
+            if (document.getElementById('tabcoll').value > 0 && document.getElementById('tabcoll').value <= 20) {
+
+                columnso = Number(document.getElementById('tabcoll').value);
+
+            }
+
+        }
+
+
+        let fonsi = document.getElementById('fontss');
+        let consi = document.getElementById('coinput');
+
+        written.onclick = function () {
+            document.getElementById('helpersvg').style.display = "block";
+            allsvgcl.style.display = "block";
+            hstyle.innerHTML = ` <style id="toemhide">
+                                        .refbod{
+                                            border:1px solid red;
+                                        }
+                                        
+                                        .backof{
+                                            background-color: silver;
+                                            resize: both;
+                                        }
+                                    </style>`;
+        };
+
+        cleditor.onclick = function () {
+            allsvgcl.style.display = "none";
+
+        };
+
+        let size = 'medium';
+        let color = 'black';
+
+        let foobj
+
+
+        fonsi.onchange = function () {
+            size = fonsi.value;
+
+            changestyle.innerHTML = `
+.inmea{
+font-size:` + size + `;
+color:` + color + `;
+}`;
+
+        }
+
+
+
+
+        consi.oninput = function () {
+            color = consi.value;
+            changestyle.innerHTML = `
+.inmea{
+font-size:` + size + `;
+color:` + color + `;
+}`;
+        };
+
+        let rectarray = [];
+        var timeso = 1;
+        headtoadd.onclick = function (evt) {
+            if (evt.target.classList.contains('svgclear')) {
+                editorxy.innerHTML = "";
+            }
+
+            if (evt.target.classList.contains('svgtext')) {
+
+                let widthr2 = Number(rect2.getAttributeNS(null, 'width'));
+                let heightr2 = Number(rect2.getAttributeNS(null, 'height'));
+                let xr2 = Number(rect2.getAttributeNS(null, 'x'));
+                let yr2 = Number(rect2.getAttributeNS(null, 'y'));
+
+
+
+
+                if (timeso <= 5) {
+                    editorxy.innerHTML += `<foreignObject onclick="makeotherd(evt)"  class="backof forobj "  x="` +
+                        xr2 + `" y="` + yr2 + `" width="` + widthr2 + `" height="` + heightr2 + `">
+        <div class="m-0 p-1 refbod inmea inmeao" spellcheck="false"  contenteditable="true"  style=" width:` +
+                        widthr2 + `px; height:` + heightr2 + `px; overflow:hidden;  text-decoration: none; user-select:none; "></div>
+        </foreignObject>`
+
+                    let tboxo = document.getElementsByClassName('inmeao').length;
+
+                    foobj = document.getElementsByClassName('forobj');
+
+                    clickresize(foobj);
+
+
+
+
+                    analyzer.onclick = function () {
+
+                        for (let l = 0; l < tboxo; l++) {
+                            let elemento = document.getElementsByClassName('inmeao')[l];
+
+                            let invalue = elemento.innerText;
+
+                            //str.replace(/(<\s*\/?\s*)Script(\s*([^>]*)?\s*>)/gi ,'$1notallowed$2')
+
+                            invalue = invalue.replace(/(<\s*\/?\s*)Script(\s*([^>]*)?\s*>)/gi,
+                            '$1notallowed$2');
+
+                            elemento.innerHTML = invalue
+                        }
+
+
+                    };
+
+                }
+            };
+
+
+
+
+
+
+
+            if (evt.target.classList.contains('svgimg')) {
+
+                if (timeso <= 5) {
+
+
+
+                    let widthr2 = Number(rect2.getAttributeNS(null, 'width'));
+                    let heightr2 = Number(rect2.getAttributeNS(null, 'height'));
+                    let xr2 = Number(rect2.getAttributeNS(null, 'x'));
+                    let yr2 = Number(rect2.getAttributeNS(null, 'y'));
+
+
+
+
+                    editorxy.innerHTML +=
+                        `<foreignObject onclick="makeotherd(evt)"  class=" forobj  backof"   x="` + xr2 + `" y="` +
+                        yr2 + `" width="` + widthr2 + `" height="` + heightr2 + `">
+        <img  width="` + widthr2 + `" height="` + heightr2 + `" src="file:///C:/Users/Dell/Desktop/ext/pho/1.png" style="user-select:none;  overflow:hidden; resize: both; ">
+        </foreignObject>`
+
+
+
+
+
+                    foobj = document.getElementsByClassName('forobj');
+
+                    for (let m = 0; m < foobj.length; m++) {
+
+                        let elo = document.getElementsByClassName('forobj')[m].children[0];
+
+                        elo.ondragover = function giveper(ev) {
+                            ev.preventDefault(ev);
+                        };
+
+                        elo.ondrop = function droped(ev) {
+                            ev.preventDefault();
+                            let datao = ev.dataTransfer.getData("valueofdiv");
+
+                            if (imagepic[datao] != undefined) {
+
+                                ev.target.src = imagepic[datao];
+
+                            }
+
+
+                        };
+
+
+
+                    }
+
+                    clickresize(foobj);
+
+                }
+
+            };
+
+
+
+
+
+
+
+            if (evt.target.classList.contains('svgtab')) {
+                if (timeso <= 5) {
+                    let widthr2 = Number(rect2.getAttributeNS(null, 'width'));
+                    let heightr2 = Number(rect2.getAttributeNS(null, 'height'));
+                    let xr2 = Number(rect2.getAttributeNS(null, 'x'));
+                    let yr2 = Number(rect2.getAttributeNS(null, 'y'));
+
+
+
+
+
+
+
+
+                    editorxy.innerHTML +=
+                        `<foreignObject onclick="makeotherd(evt)"  class=" forobj backof inmea"  x="` + xr2 +
+                        `" y="` + yr2 + `" width="` + widthr2 + `" height="` + heightr2 + `">
+                    <table class="toensuretab" contenteditable="true" style=" width:` + widthr2 + `px; height:` +
+                        heightr2 + `px;  overflow:hidden; ">
+ 
+                        </table>
+        </foreignObject>`
+
+
+
+                    let ensuretab = document.getElementsByClassName('toensuretab').length;
+
+
+                    for (let m = 0; m < ensuretab; m++) {
+
+
+
+                        if (document.getElementsByClassName('toensuretab')[m].children[0] == undefined) {
+
+                            for (let z = 0; z < rowso; z++) {
+
+                                let roww = document.getElementsByClassName('toensuretab')[m].insertRow(z);
+
+                                roww.classList.add('toenter');
+                                roww.style.textAlign = "center";
+                            }
+
+
+                        }
+
+
+                        for (let c = 0; c < document.getElementsByClassName('toenter').length; c++) {
+
+
+                            if (document.getElementsByClassName('toenter')[c].children[0] == undefined) {
+
+                                for (let k = 0; k < columnso; k++) {
+
+
+                                    let cello = document.getElementsByClassName('toenter')[c].insertCell(k);
+
+                                    cello.innerHTML = 'cell'
+                                }
+
+                            }
+
+
+                        }
+
+
+
+
+
+
+
+
+
+                    }
+
+
+
+
+
+
+
+
+
+
+
+
+                    foobj = document.getElementsByClassName('forobj');
+
+                    clickresize(foobj);
+
+
+                    ;
+                }
+            }
+        };
+
+
+        function clickresize(foobj) {
+
+            for (let u = 0; u < foobj.length; u++) {
+                requestAnimationFrame(chwidthh);
+
+                let ele = foobj[u];
+
+
+
+                function chwidthh() {
+                    ele = document.getElementsByClassName('forobj')[u];
+
+                    ele.onmouseover = function (e) {
+                        resizer(ele)
+                    }
+                    ele.onmousemove = function (e) {
+                        resizer(ele)
+                    }
+
+
+
+                }
+
+
+
+                ele.onmouseout = function () {
+
+                    cancelAnimationFrame(chwidthh);
+
+                }
+            };
+        }
+
+
+
+        function resizer(ele) {
+
+            let wid = parseInt(window.getComputedStyle(ele).width);
+            let hei = parseInt(window.getComputedStyle(ele).height);
+
+            ele.children[0].style.width = wid + 'px';
+            ele.children[0].style.height = hei + 'px';
+
+            window.onkeydown = function (eve) {
+
+                if (eve.isComposing || eve.keyCode === 46) {
+                    ele.remove();
+                    foobj = document.getElementsByClassName('forobj');
+                }
+
+                if (eve.isComposing || eve.keyCode === 17) {
+                    ele.classList.add('draggableo');
+                }
+
+
+            };
+
+            window.onkeyup = function () {
+                ele.classList.remove('draggableo');
+            };
+
+
+
+        };
+
+        /*processall.onmouseover=function(){
+            document.getElementById('helpersvg').style.display="none";
+        }
+
+        processall.onmouseout=function(){
+            document.getElementById('helpersvg').style.display="block";
+        }*/
+
+        processall.onclick = function () {
+
+            hstyle.innerHTML = '';
+
+            document.getElementById('helpersvg').style.display = "none";
+
+            let tosetpho = editorxy.innerHTML;
+
+            let newsvg = document.createElement('svg');
+
+            newsvg.innerHTML = tosetpho;
+
+
+            let svgdata = (new XMLSerializer()).serializeToString(wrsvg);
+
+
+            let imgo = new Image();
+
+
+
+
+            imgo.onload = function () {
+                canvask.width = imgo.width;
+                canvask.height = imgo.height;
+                svgview.style.width = imgo.width + 'px';
+                svgview.style.height = imgo.height + 'px';
+                context.drawImage(imgo, 0, 0);
+
+            };
+
+
+            imgo.setAttribute('crossOrigin', '');
+            imgo.src = 'data:image/svg+xml;base64,' + window.btoa(unescape(encodeURIComponent(svgdata)));
+
+
+            allsvgcl.style.display = "none";
+        };
+    </script>
+
+
+
+    <style>
+        .embossed {
+            border: 3px outset #2d89ef;
+            background-color: #2d87efbd;
+        }
+
+        .note {
+            background-color: #d1d6d6;
+            border: 2px outset#d1d6d6;
+            box-shadow: inset 0 0 5px 0 #95a5a6;
+        }
+
+        .active {
+            box-shadow: inset 0 0 5px 0 #d4d4d4;
+            background-color: #ffffff;
+        }
+
+        .activeo {
+            box-shadow: inset 0 0 30px 0 #d4d4d4;
+            background-color: #95a5a6;
+            border: 3px outset #95a5a6;
+        }
+
+        #canvasview {
+            border: 1px solid #95a5a6;
+        }
+
+        .done {
+            background-color: rgba(0, 185, 25, 0.74);
+            border: 3px outset rgba(0, 185, 25, 0.74);
+        }
+
+        .notdone {
+            background-color: rgba(255, 0, 0, 0.726);
+        }
+    </style>
+
+
+
+    <script>
+        const sidebar = document.getElementById('masidebar');
+        const navbar = document.getElementById('navibar');
+        const mainpage = document.getElementById('mainpage');
+        const midpage = document.getElementById('midpg');
+        const maincon = document.getElementById('mainconmid');
+        const palate = document.getElementById('qpalate');
+        const subnotation = document.getElementById('subnotation');
+        const whpalate = document.getElementById('whpalate');
+        const cancon = document.getElementById('canvascont');
+        const canvask = document.getElementById('canvasview');
+        const context = canvask.getContext('2d');
+        const svgview = document.getElementById('svgview1');
+        const svgrect = document.getElementById('svgrect1');
+        const textent = document.getElementById('intext');
+        const goopen = document.getElementById('goto');
+        const npdf = document.getElementById('nextpdfp');
+        const ppdf = document.getElementById('previouspdfp');
+        const lpdf = document.getElementById('loadpdfs');
+        const pdfpage = document.getElementById('inpdf');
+        const pdfscale = document.getElementById('scalepdf');
+        const zzcircleo = document.getElementById('zzcirc1');
+        const zxcircleo = document.getElementById('zxcirc1');
+        const zycircleo = document.getElementById('zycirc1');
+        const zdcircleo = document.getElementById('zdcirc1');
+        const relocate = document.getElementById('relocate');
+
+
+        relocate.onclick = function () {
+            svgrect.setAttributeNS(null, 'x', 0);
+            svgrect.setAttributeNS(null, 'y', 0);
+            svgrect.setAttributeNS(null, 'width', 50);
+            svgrect.setAttributeNS(null, 'height', 50);
+            locatecirc();
+        };
+
+
+
+        let subj = {
+            physics: 22,
+            chemistry: 23,
+            biology: 45,
+            Gk: 90
+        }
+
+        let imagepic = {};
+
+
+        let pdflink = '';
+
+        lpdf.onclick = function () {
+            loadpdf();
+        };
+
+        function loadpdf(e) {
+
+
+
+
+            let pdflinko = window.prompt('What is the url of pdf');
+
+            if (pdflinko != null && pdflinko.trim() != "") {
+
+                pdflink = pdflinko;
+
+
+                let loadingTask = pdfjsLib.getDocument(pdflink);
+                lpdf.children[0].style.display = "";
+
+                loadingTask.promise.then(function (pdf) {
+
+                    let render = null;
+
+                    let renderingdata = false;
+
+
+                    let pageso = pdf.numPages;
+
+                    let pago = 1;
+
+                    let scaleso = 1.5;
+
+                    lpdfo(pdf);
+
+                    function lpdfo(pdf) {
+
+                        //in any case if previous render is not finished
+                        if (render != null) {
+                            render.cancel();
+                        }
+
+                        pdf.getPage(pago).then(function (page) {
+
+                            renderingdata = true;
+
+
+                            let scale = scaleso;
+                            let viewport = page.getViewport({
+                                scale: scale,
+                            });
+
+
+                            canvask.height = viewport.height;
+                            canvask.width = viewport.width;
+                            svgview.style.height = viewport.height + 'px';
+                            svgview.style.width = viewport.width + 'px';
+
+
+
+                            let renderContext = {
+                                canvasContext: context,
+                                viewport: viewport,
+                            };
+
+                            render = page.render(renderContext);
+
+                            render.promise.then(function () {
+                                renderingdata = false;
+                                lpdf.children[0].style.display = "none";
+                            });
+
+                            npdf.onclick = function () {
+
+                                if (renderingdata == false) {
+                                    if (pago < pageso) {
+                                        pago = pago + 1;
+                                        pdfpage.setAttribute('placeholder', 'Pdf Page = ' + pago);
+                                        lpdfo(pdf)
+                                    } else {
+                                        pago = 1;
+                                        pdfpage.setAttribute('placeholder', 'Pdf Page = ' + pago);
+                                        lpdfo(pdf)
+                                    }
+                                }
+
+                            }
+
+                            ppdf.onclick = function () {
+                                if (renderingdata == false) {
+
+                                    if (pago == 1) {
+                                        pago = pageso;
+                                        pdfpage.setAttribute('placeholder', 'Pdf Page = ' + pago);
+                                        lpdfo(pdf);
+                                    } else {
+                                        pago = pago - 1;
+                                        pdfpage.setAttribute('placeholder', 'Pdf Page = ' + pago);
+                                        lpdfo(pdf);
+                                    }
+                                }
+                            }
+
+                            pdfpage.onchange = function () {
+                                if (renderingdata == false) {
+                                    changeitto();
+                                }
+                            };
+                            pdfpage.oninput = function () {
+                                if (renderingdata == false) {
+                                    changeitto();
+                                }
+                            };
+
+                            function changeitto() {
+                                if (pdfpage.value > 0 && pdfpage.value <= pageso) {
+                                    pago = Number(pdfpage.value);
+                                    pdfpage.setAttribute('placeholder', 'Pdf Page = ' + pago);
+                                    lpdfo(pdf);
+                                }
+                            };
+
+
+                            pdfscale.onchange = function () {
+                                if (renderingdata == false) {
+
+                                    scaleitto();
+                                }
+
+                            };
+
+                            pdfscale.oninput = function () {
+                                if (renderingdata == false) {
+
+                                    scaleitto();
+                                }
+
+                            };
+
+                            function scaleitto() {
+
+                                if (pdfscale.value > 0 && pdfscale.value < 6) {
+                                    scaleso = Number(pdfscale.value);
+                                    pdfscale.setAttribute('placeholder', 'Scale = ' + scaleso);
+                                    lpdfo(pdf);
+                                }
+                            };
+
+                        });
+                    }
+                });
+
+
+            } else {
+                alert('please select a url');
+            }
+        }
+
+
+
+
+        for (let i = 0; i < Object.keys(subj).length; i++) {
+
+            let subjects = Object.keys(subj)[i];
+
+            subnotation.innerHTML += `<div class="mx-1 my-1  note  btn" id="` + subjects + 'for' +
+                `""style="float:left;">` + subjects + `</div>`;
+
+
+        }
+
+
+        for (let i = 0; i < Object.keys(subj).length; i++) {
+            document.getElementById(Object.keys(subj)[i] + 'for').addEventListener("click", function () {
+
+
+
+                let subje = Object.keys(subj)[i];
+
+                let chancolor = document.getElementById(subje + 'for');
+
+                let current = document.getElementsByClassName("active");
+
+                if (current.length > 0) {
+
+                    current[0].className = current[0].className.replace(" active", "");
+                }
+
+
+
+                chancolor.classList.add("active");
+
+
+
+                let quebox = subj[subje];
+                palate.innerHTML = '';
+
+                for (let v = 1; v <= quebox; v++) {
+                    let id = String(subje + v + 'for');
+
+                    palate.innerHTML +=
+                        `<div ondragstart="dragn(event)" class="m-2 p-0 col-2  btn embossed clicko"  draggable="true"  id="` +
+                        id +
+                        `" "style="float:left;">` + v + `</div>`;
+
+
+
+                }
+
+
+                for (let v = 1; v <= quebox; v++) {
+
+                    let id = String(subje + v + 'for');
+
+                    if (typeof (document.getElementById(id)) != null) {
+
+                        document.getElementById(id).onclick = function () {
+
+
+
+                            let chancolorp = document.getElementById(id);
+
+                            let currentp = document.getElementsByClassName("activeo");
+
+                            if (currentp.length > 0) {
+
+                                currentp[0].className = currentp[0].className.replace(" activeo", "");
+                            }
+
+                            chancolorp.classList.add("activeo");
+
+                            clickbait(id, subje, v, i);
+
+                        }
+
+                    }
+
+                }
+
+
+                for (let o = 0; o < Object.keys(imagepic).length; o++) {
+
+                    if (document.getElementById(Object.keys(imagepic)[o]) != null) {
+
+
+                        document.getElementById(Object.keys(imagepic)[o]).classList.add('done');
+
+                    }
+
+                };
+            });
+
+
+
+
+        }
+
+        function dragn(ev) {
+            ev.dataTransfer.setData("valueofdiv", ev.target.id);
+        }
+
+        function clickbait(id, subje, v, i) {
+
+
+
+
+
+
+
+
+            goopen.onclick = function () {
+
+                if (document.getElementsByClassName("activeo")[0] == null) {
+                    alert('click a question in the palatte');
+                } else {
+
+                    let xo = svgrect.getAttributeNS(null, "x");
+
+                    let yo = svgrect.getAttributeNS(null, "y");
+
+                    let widtho = svgrect.getAttributeNS(null, "width");
+
+                    let heighto = svgrect.getAttributeNS(null, "height");
+
+                    let imgdata = context.getImageData(xo, yo, widtho, heighto);
+
+
+                    canvas2.width = widtho;
+                    canvas2.height = heighto;
+                    canvas2.getContext('2d').putImageData(imgdata, 0, 0);
+                    let result = canvas2.toDataURL();
+
+                    imagepic[id] = result;
+
+
+
+
+
+                    //let newwin=window.open();
+
+
+                    for (let l = 0; l < Object.keys(imagepic).length; l++) {
+                        if (document.getElementById(Object.keys(imagepic)[l]) != null) {
+
+
+                            document.getElementById(Object.keys(imagepic)[l]).classList.add('done')
+                        };
+
+                        //newwin.document.write(id+`<img src="`+imagepic[Object.keys(imagepic)[l]]+`" style="background-color:black; margin:3%; border:1px solid grey;">`);
+
+
+
+                    };
+
+                    if (v < subj[subje]) {
+                        if (document.getElementById(String(subje + Number(v + 1) + 'for')) != null) {
+
+                            document.getElementById(String(subje + Number(v + 1) + 'for')).click()
+
+                        } else {
+                            alert('choose a question to continue');
+                        }
+                    } else {
+                        if (i < Object.keys(subj).length - 1) {
+
+                            document.getElementById(Object.keys(subj)[i + 1] + 'for').click();
+
+                            let dummy = Object.keys(subj)[i + 1];
+
+                            document.getElementById(String(dummy + 1 + 'for')).click();
+
+                        }
+                    }
+
+
+
+
+                }
+
+            };
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        function winsizes(e) {
+            let winheight = window.innerHeight;
+            let winwidth = window.innerWidth;
+            let navheight = navbar.offsetHeight;
+            let sidewidth = sidebar.offsetWidth;
+            let pgwidth = mainpage.offsetWidth;
+            let pgheight = mainpage.offsetHeight;
+            let palheight = whpalate.offsetHeight;
+
+
+            sockview.style.height = palheight - subnotation.offsetHeight - 4 + 'px';
+            sockview.style.width = whpalate.offsetWidth - 4 + 'px';
+            palate.style.height = palheight - subnotation.offsetHeight + 'px';
+            maincon.style.height = winheight - navheight + 'px';
+
+        };
+
+        window.onload = function () {
+            winsizes()
+        };
+
+        window.onresize = function () {
+            winsizes()
+        };
+
+
+
+
+
+
+
+        const hp = document.getElementById('he+');
+        const wp = document.getElementById('wi+');
+        const hm = document.getElementById('he-');
+        const wm = document.getElementById('wi-');
+
+
+
+        let scla = 4;
+
+        textent.onchange = function (e) {
+            if (textent.value == 0) {
+                scla = 0
+            } else {
+                scla = Number(textent.value)
+            }
+        }
+
+
+        hp.onclick = function () {
+            let before = parseFloat(svgrect.getAttribute("height"));
+
+            let heip = before + scla;
+            svgrect.setAttribute('height', heip);
+            locatecirc()
+
+        };
+
+        wp.onclick = function () {
+            let before = parseFloat(svgrect.getAttribute("width"));
+
+            let wiip = before + scla;
+            svgrect.setAttribute('width', wiip);
+            locatecirc()
+        };
+
+        hm.onclick = function () {
+            let before = parseFloat(svgrect.getAttribute("height"));
+            if (before >= scla) {
+
+                let heim = before - scla;
+                svgrect.setAttribute('height', heim);
+                locatecirc()
+            }
+
+
+        };
+
+        wm.onclick = function () {
+            let before = parseFloat(svgrect.getAttribute("width"));
+            if (before >= scla) {
+
+                let wiim = before - scla;
+                svgrect.setAttribute('width', wiim);
+                locatecirc()
+            }
+        };
+
+
+        function locatecirc() {
+
+            let widthofrect = parseFloat(svgrect.getAttribute("width"));
+            let heightofrect = parseFloat(svgrect.getAttribute("height"));
+
+            let xofrect = parseFloat(svgrect.getAttribute("x"));
+            let yofrect = parseFloat(svgrect.getAttribute("y"));
+
+            zzcircleo.setAttributeNS(null, "cx", xofrect);
+            zzcircleo.setAttributeNS(null, "cy", yofrect);
+
+            zxcircleo.setAttributeNS(null, "cx", xofrect + widthofrect);
+
+            zxcircleo.setAttributeNS(null, "cy", yofrect);
+
+            zycircleo.setAttributeNS(null, "cx", xofrect);
+
+            zycircleo.setAttributeNS(null, "cy", yofrect + heightofrect);
+
+
+            zdcircleo.setAttributeNS(null, "cx", xofrect + widthofrect);
+            zdcircleo.setAttributeNS(null, "cy", yofrect + heightofrect);
+
+        };
+
+        let canvas2 = document.createElement('canvas');
+    </script>
+
+
+
+    <script>
+        const videocap = document.getElementById('canvasvideo');
+        const captureoimg = document.getElementById('capturingimg');
+        const gocapto = document.getElementById('gocapt');
+
+        captureoimg.onclick = function () {
+            captureimg();
+        };
+
+        function captureimg() {
+
+            canvask.width = 1;
+            canvask.height = 1;
+            svgview.style.width = 1 + 'px';
+            svgview.style.height = 1 + 'px';
+
+            gocapto.style.display = "block";
+            videocap.style.display = "block";
+
+            navigator.mediaDevices.getDisplayMedia({
+                    video: true,
+                    audio: false
+                })
+                .then(function (stream) {
+
+                    videocap.srcObject = stream;
+
+                    videocap.play();
+
+                    videocap.addEventListener('canplay', function (ev) {
+
+                        let widtho = videocap.videoWidth;
+                        let heighto = videocap.videoHeight;
+
+                        gocapto.onclick = function () {
+
+
+
+                            canvask.width = widtho;
+                            canvask.height = heighto;
+                            svgview.style.width = widtho + 'px';
+                            svgview.style.height = heighto + 'px';
+
+                            context.drawImage(videocap, 0, 0, widtho, heighto);
+
+                            let capture = canvask.toDataURL('image/png');
+
+                            from = false;
+
+                            let maxWidth = 200;
+                            let maxHeight = 200;
+                            let maxenlarge = 600;
+
+                            myth(null, capture, from, maxenlarge, maxWidth, maxHeight);
+
+                            videocap.srcObject = null;
+                            videocap.style.display = "none";
+                            gocapto.style.display = "none";
+
+                            stream.getTracks().forEach(track => track.stop());
+
+
+                        };
+
+                    });
+
+                })
+                .catch(function (err) {
+                    alert("An error occurred: " + err);
+                });
+
+        };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        const loadimg = document.getElementById('loadingimg');
+
+        const imgplus = document.getElementById('imgplus');
+
+        const imgminus = document.getElementById('imgminus');
+
+
+
+
+
+        loadimg.onchange = function (e) {
+            loadFile(e);
+        };
+
+
+
+
+
+
+        let from;
+
+
+
+        function loadFile(event) {
+
+            let maxWidth = 200;
+            let maxHeight = 200;
+
+
+            let reader = new FileReader();
+
+            reader.readAsDataURL(event.target.files[0]);
+
+            from = true;
+
+
+            let maxenlarge = 200;
+            reader.onload = function () {
+
+                myth(reader, null, null, maxenlarge, maxWidth, maxHeight);
+            }
+
+
+
+        };
+
+
+        function myth(reader, capture, from, maxenlarge, maxWidth, maxHeight) {
+
+
+
+            let dummyimg = new Image();
+
+            dummyimg.onload = function loadimgo() {
+
+                let widtho = dummyimg.width;
+                let heighto = dummyimg.height;
+
+
+                imgminus.onclick = function () {
+
+                    if (maxHeight > 100 && maxWidth > 100) {
+                        maxHeight = maxHeight - 20;
+                        maxWidth = maxWidth - 20;
+                        loadimgo();
+                    };
+
+
+
+                };
+
+
+
+                imgplus.onclick = function () {
+
+                    if (maxHeight <= dummyimg.height + maxenlarge && maxWidth <= dummyimg.width + maxenlarge) {
+                        maxHeight = maxHeight + 20;
+                        maxWidth = maxWidth + 20;
+                        loadimgo();
+                    };
+                };
+
+
+
+
+                if (dummyimg.width > 50 && dummyimg.height > 50) {
+
+
+
+
+
+
+                    scimg(widtho, heighto, maxWidth, maxHeight);
+
+
+                    function scimg(widtho, heighto, maxWidth, maxHeight) {
+
+                        let ratio = 1;
+
+                        ratio = Math.min(maxWidth / widtho, maxHeight / heighto);
+
+
+
+
+
+                        svgview.style.width = widtho * ratio + 'px';
+                        svgview.style.height = heighto * ratio; + 'px';
+
+                        canvask.width = widtho * ratio;
+                        canvask.height = heighto * ratio;
+
+                        console.log(heighto * ratio + 'h and w' + widtho * ratio + 'ratio=' + ratio)
+
+                        context.drawImage(dummyimg, 0, 0, widtho * ratio, heighto * ratio);
+
+                    };
+                }
+
+
+            };
+
+            if (from != false) {
+                dummyimg.src = reader.result;
+            } else {
+                dummyimg.src = capture;
+
+            }
+        };
+    </script>
+
+
+    <script>
+        function makeotherd(evt) {
+            let svg = evt.target;
+
+            svg.addEventListener('mousedown', startDrag);
+            svg.addEventListener('mousemove', drag);
+            svg.addEventListener('mouseup', endDrag);
+
+            function getMousePosition2(evt) {
+                var CTM = svg.getScreenCTM();
+                return {
+                    x: (evt.clientX - CTM.e) / CTM.a,
+                    y: (evt.clientY - CTM.f) / CTM.d
+                };
+            }
+
+            let selectedElement, offset;
+
+
+            function startDrag(evt) {
+                if (evt.target.classList.contains('draggableo')) {
+                    selectedElement = evt.target;
+                    offset = getMousePosition2(evt);
+                    offset.x -= parseFloat(selectedElement.getAttributeNS(null, "x"));
+                    offset.y -= parseFloat(selectedElement.getAttributeNS(null, "y"));
+
+                }
+            }
+
+            function drag(evt) {
+                if (selectedElement) {
+                    let coord = getMousePosition2(evt);
+                    selectedElement.setAttributeNS(null, "x", coord.x - offset.x);
+                    selectedElement.setAttributeNS(null, "y", coord.y - offset.y);
+                };
+            }
+
+            function endDrag(evt) {
+                selectedElement = null;
+
+            }
+        }
+    </script>
+
+    <script>
+        for (let i = 1; i <= document.getElementsByClassName('svgresize').length; i++) {
+
+            let svgg = document.getElementById('svgview' + i);
+            let recto = document.getElementById('svgrect' + i);
+            let zzcircle = document.getElementById('zzcirc' + i);
+            let zxcircle = document.getElementById('zxcirc' + i);
+            let zycircle = document.getElementById('zycirc' + i);
+            let zdcircle = document.getElementById('zdcirc' + i);
+
+
+            svgg.onload = function (evt) {
+                makeDraggable(evt)
+            };
+
+            function makeDraggable(evt) {
+
+                var svg = evt.target;
+
+                svg.addEventListener('mousedown', startDrag);
+                svg.addEventListener('mousemove', drag);
+                svg.addEventListener('mouseup', endDrag);
+
+                function getMousePosition(evt) {
+                    var CTM = svg.getScreenCTM();
+                    return {
+                        x: (evt.clientX - CTM.e) / CTM.a,
+                        y: (evt.clientY - CTM.f) / CTM.d
+                    };
+                }
+
+                var selectedElement, offset, selectedElement2, selectedElement3, selectedElement4, selectedElement5,
+                    offseto, widthoo, heightoo, widthoor, heightoor, offsetor, zxi, zyi, dxi, dyi, xxi, xyi, widthoox,
+                    heightoox, offsetox, yxi, yyi, widthooy, heightooy, offsetoy
+
+
+                function startDrag(evt) {
+                    if (evt.target.classList.contains('draggable')) {
+                        selectedElement = evt.target;
+                        offset = getMousePosition(evt);
+                        offset.x -= parseFloat(selectedElement.getAttributeNS(null, "x"));
+                        offset.y -= parseFloat(selectedElement.getAttributeNS(null, "y"));
+
+                    }
+
+                    if (evt.target.classList.contains('resizez')) {
+                        selectedElement2 = evt.target;
+
+                        widthoo = recto.getAttributeNS(null, "width");
+                        heightoo = recto.getAttributeNS(null, "height");
+
+                        offseto = getMousePosition(evt);
+
+                        let centerx = Number(zzcircle.getAttributeNS(null, "cx"));
+                        let centery = Number(zzcircle.getAttributeNS(null, "cy"));
+
+                        zxi = offseto.x - centerx
+                        zyi = offseto.y - centery
+
+
+                    }
+
+                    if (evt.target.classList.contains('resizexy')) {
+
+                        selectedElement3 = evt.target;
+
+                        widthoor = Number(recto.getAttributeNS(null, "width"));
+                        heightoor = Number(recto.getAttributeNS(null, "height"));
+
+                        offsetor = getMousePosition(evt);
+                        let centerx = Number(zdcircle.getAttributeNS(null, "cx"));
+                        let centery = Number(zdcircle.getAttributeNS(null, "cy"));
+
+                        dxi = offsetor.x - centerx
+                        dyi = offsetor.y - centery
+
+                    }
+
+
+                    if (evt.target.classList.contains('resizex')) {
+
+                        selectedElement4 = evt.target;
+
+                        widthoox = Number(recto.getAttributeNS(null, "width"));
+                        heightoox = Number(recto.getAttributeNS(null, "height"));
+
+                        offsetox = getMousePosition(evt);
+                        let centerx = Number(zxcircle.getAttributeNS(null, "cx"));
+                        let centery = Number(zxcircle.getAttributeNS(null, "cy"));
+
+                        xxi = offsetox.x - centerx
+                        xyi = offsetox.y - centery
+
+                    }
+
+                    if (evt.target.classList.contains('resizey')) {
+
+                        selectedElement5 = evt.target;
+
+                        widthooy = Number(recto.getAttributeNS(null, "width"));
+                        heightooy = Number(recto.getAttributeNS(null, "height"));
+
+                        offsetoy = getMousePosition(evt);
+                        let centerx = Number(zycircle.getAttributeNS(null, "cx"));
+                        let centery = Number(zycircle.getAttributeNS(null, "cy"));
+
+                        yxi = offsetoy.x - centerx
+                        yyi = offsetoy.y - centery
+
+                    }
+
+
+                }
+
+                function drag(evt) {
+                    if (selectedElement) {
+                        let widtho = Number(recto.getAttributeNS(null, "width"));
+                        let heighto = Number(recto.getAttributeNS(null, "height"));
+
+                        var coord = getMousePosition(evt);
+                        selectedElement.setAttributeNS(null, "x", coord.x - offset.x);
+                        selectedElement.setAttributeNS(null, "y", coord.y - offset.y);
+
+
+                        zzcircle.setAttributeNS(null, "cx", coord.x - offset.x);
+                        zzcircle.setAttributeNS(null, "cy", coord.y - offset.y);
+
+                        zxcircle.setAttributeNS(null, "cx", coord.x - offset.x + Number(widtho));
+
+                        zxcircle.setAttributeNS(null, "cy", coord.y - offset.y);
+
+                        zycircle.setAttributeNS(null, "cx", coord.x - offset.x);
+
+                        zycircle.setAttributeNS(null, "cy", coord.y - offset.y + Number(heighto));
+
+
+                        zdcircle.setAttributeNS(null, "cx", coord.x - offset.x + Number(widtho));
+                        zdcircle.setAttributeNS(null, "cy", coord.y - offset.y + Number(heighto));
+
+                    };
+
+
+
+
+                    if (selectedElement2) {
+
+                        var coor = getMousePosition(evt);
+
+
+                        if (widthoo - coor.x + offseto.x - zxi > 10 && heightoo - coor.y + offseto.y - zyi > 10) {
+
+                            recto.setAttributeNS(null, "x", coor.x);
+                            recto.setAttributeNS(null, "y", coor.y);
+
+
+
+                            recto.setAttributeNS(null, "width", Math.abs(widthoo - coor.x + offseto.x - zxi));
+                            recto.setAttributeNS(null, "height", Math.abs(heightoo - coor.y + offseto.y - zyi));
+
+
+
+                            let withl = Number(recto.getAttributeNS(null, "width"));
+                            let heig = Number(recto.getAttributeNS(null, "height"));
+
+                            zzcircle.setAttributeNS(null, "cx", coor.x);
+                            zzcircle.setAttributeNS(null, "cy", coor.y);
+
+                            zxcircle.setAttributeNS(null, "cx", coor.x + withl);
+                            zxcircle.setAttributeNS(null, "cy", coor.y);
+
+                            zycircle.setAttributeNS(null, "cx", coor.x);
+                            zycircle.setAttributeNS(null, "cy", coor.y + heig);
+
+                            zdcircle.setAttributeNS(null, "cx", coor.x + withl);
+                            zdcircle.setAttributeNS(null, "cy", coor.y + heig);
+                        }
+                    };
+
+
+
+                    if (selectedElement3) {
+
+                        var coora = getMousePosition(evt);
+
+                        if (widthoor + coora.x - offsetor.x + dxi > 10 && heightoor + coora.y - offsetor.y + dyi > 10) {
+
+
+                            recto.setAttributeNS(null, "width", Math.abs(widthoor + coora.x - offsetor.x + dxi));
+                            recto.setAttributeNS(null, "height", Math.abs(heightoor + coora.y - offsetor.y + dyi));
+
+                            let withlo = Number(recto.getAttributeNS(null, "width"));
+                            let heigo = Number(recto.getAttributeNS(null, "height"));
+
+                            recto.setAttributeNS(null, "x", coora.x - withlo);
+                            recto.setAttributeNS(null, "y", coora.y - heigo);
+
+
+
+                            zzcircle.setAttributeNS(null, "cx", coora.x - withlo);
+                            zzcircle.setAttributeNS(null, "cy", coora.y - heigo);
+
+                            zxcircle.setAttributeNS(null, "cx", coora.x);
+                            zxcircle.setAttributeNS(null, "cy", coora.y - heigo);
+
+                            zycircle.setAttributeNS(null, "cx", coora.x - withlo);
+                            zycircle.setAttributeNS(null, "cy", coora.y);
+
+                            zdcircle.setAttributeNS(null, "cx", coora.x);
+                            zdcircle.setAttributeNS(null, "cy", coora.y);
+                        }
+                    };
+
+
+                    if (selectedElement4) {
+
+                        var coox = getMousePosition(evt);
+
+                        if (widthoox + coox.x - offsetox.x + xxi > 10 && heightoox - coox.y + offsetox.y - xyi > 10) {
+
+                            recto.setAttributeNS(null, "width", Math.abs(widthoox + coox.x - offsetox.x + xxi));
+                            recto.setAttributeNS(null, "height", Math.abs(heightoox - coox.y + offsetox.y - xyi));
+
+                            let withl = Number(recto.getAttributeNS(null, "width"));
+                            let heig = Number(recto.getAttributeNS(null, "height"));
+
+                            recto.setAttributeNS(null, "x", coox.x - withl);
+                            recto.setAttributeNS(null, "y", coox.y);
+
+                            zzcircle.setAttributeNS(null, "cx", coox.x - withl);
+                            zzcircle.setAttributeNS(null, "cy", coox.y);
+
+                            zycircle.setAttributeNS(null, "cx", coox.x - withl);
+                            zycircle.setAttributeNS(null, "cy", coox.y + heig);
+
+                            zxcircle.setAttributeNS(null, "cx", coox.x);
+                            zxcircle.setAttributeNS(null, "cy", coox.y);
+
+                            zdcircle.setAttributeNS(null, "cx", coox.x);
+                            zdcircle.setAttributeNS(null, "cy", coox.y + heig);
+                        }
+
+                    };
+
+                    if (selectedElement5) {
+
+                        var cooy = getMousePosition(evt);
+
+                        if (widthooy - cooy.x + offsetoy.x - yxi > 10 && heightooy + cooy.y - offsetoy.y + yyi > 10) {
+
+                            recto.setAttributeNS(null, "width", Math.abs(widthooy - cooy.x + offsetoy.x - yxi));
+                            recto.setAttributeNS(null, "height", Math.abs(heightooy + cooy.y - offsetoy.y + yyi));
+
+                            let withl = Number(recto.getAttributeNS(null, "width"));
+                            let heig = Number(recto.getAttributeNS(null, "height"));
+
+                            recto.setAttributeNS(null, "x", cooy.x);
+                            recto.setAttributeNS(null, "y", cooy.y - heig);
+
+                            zzcircle.setAttributeNS(null, "cx", cooy.x);
+                            zzcircle.setAttributeNS(null, "cy", cooy.y - heig);
+
+                            zxcircle.setAttributeNS(null, "cx", cooy.x + withl);
+                            zxcircle.setAttributeNS(null, "cy", cooy.y - heig);
+
+                            zycircle.setAttributeNS(null, "cx", cooy.x);
+                            zycircle.setAttributeNS(null, "cy", cooy.y);
+
+                            zdcircle.setAttributeNS(null, "cx", cooy.x + withl);
+                            zdcircle.setAttributeNS(null, "cy", cooy.y);
+
+                        }
+                    };
+
+
+                }
+
+                function endDrag(evt) {
+                    selectedElement = null;
+                    selectedElement2 = null;
+                    selectedElement3 = null;
+                    selectedElement4 = null;
+                    selectedElement5 = null;
+                }
+
+            }
+        };
+    </script>
+
+
+
+
+    <script>
+        window.addEventListener('beforeunload', function (e) {
+            e.preventDefault();
+
+            e.returnValue = '';
+
+        });
+    </script>
+</body>
+
+</html>
